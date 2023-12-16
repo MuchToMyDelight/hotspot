@@ -1708,6 +1708,7 @@ void PerfParser::filterResults(const Data::FilterAction& filter)
     using namespace ThreadWeaver;
     const auto costAggregation = Settings::instance()->costAggregation();
     stream() << make_job([this, filter, costAggregation]() {
+        clock_t startClock = clock();
         Queue queue;
         queue.setMaximumNumberOfThreads(QThread::idealThreadCount());
 
@@ -1900,6 +1901,7 @@ void PerfParser::filterResults(const Data::FilterAction& filter)
         }
 
         m_costAggregationChanged = false;
+        printf("XXXXXXXXXXXXXXX QThread::idealThreadCount() = %d,  total execution time is %.2f ms\n", QThread::idealThreadCount(), (clock() - startClock)*1000./CLOCKS_PER_SEC);
 
         emit bottomUpDataAvailable(bottomUp);
         emit topDownDataAvailable(topDown);
